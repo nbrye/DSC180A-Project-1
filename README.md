@@ -52,4 +52,3 @@ handle making a DS project rerunnable and easy to navigate.
 **Try running this yourself! (It will involve getting a Kaggle account
 and downloading the API Token).**
 
-

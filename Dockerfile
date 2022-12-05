@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install pip requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir pandas numpy scikit-learn
+RUN pip install --no-cache-dir pandas numpy scikit-learn seaborn matplotlib pytz ast calendar
 
 WORKDIR /app
 COPY . /app

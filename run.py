@@ -9,9 +9,9 @@ import numpy as np
 
 sys.path.insert(0, 'src')
 
-from etl import clean_bedtime, clean_sleep_stages, clean_readiness, clean_sleep
+from etl import clean_bedtime, clean_sleep_stages, clean_readiness, clean_sleep, clean_resting_hr, clean_longitudinal_data
 
-from plots import readiness_score_plot, sleep_score_plot, bedtimes_plot, sleep_stages_plot
+from plots import readiness_score_plot, sleep_score_plot, bedtimes_plot, sleep_stages_plot, resting_hr_plot, longitudinal_hr_sleep_burn
 
 
 def main(targets):
@@ -22,6 +22,8 @@ def main(targets):
         sleep_score_plot(p, clean_sleep(p, "data"))
         bedtimes_plot(p, clean_bedtime(p, "data"))
         sleep_stages_plot(p, clean_sleep_stages(p, "data"))
+        resting_hr_plot(p, clean_resting_hr(p, "data"))
+        longitudinal_hr_sleep_burn(p, clean_longitudinal_data(p, "data"))
     return
 
 

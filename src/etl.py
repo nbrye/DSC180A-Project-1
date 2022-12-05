@@ -8,6 +8,8 @@ from pytz import timezone
 import pytz
 from matplotlib import dates as mdates
 import os
+import ast
+import calendar
 # %matplotlib inline
 
 ### Data Cleaning
@@ -66,4 +68,36 @@ def clean_sleep(patient, datadir):
     file_name = "{}/{}_sleep.csv".format(patient, patient)
     file_path = os.path.join(datadir, file_name)
     df = pd.read_csv(file_path)[["summary_date", "score"]]
+    return df
+
+def clean_resting_hr(patient, datadir):
+    """
+    Load and clean data for resting heart rate plot function.
+    """
+    file_name = "{}/{}_sleep_periods.csv".format(patient, patient)
+    file_path = os.path.join(datadir, file_name)
+    df = pd.read_csv(file_path)[["day", "period", "bedtime_start", "bedtime_end", "average_heart_rate", "heart_rate"]]
+
+    df["heart_rate"] = df["heart_rate"].apply(lambda x: x if x is np.nan else ast.literal_eval(x))
+    df["bedtime_start"] = pd.to_datetime(df["bedtime_start"]).apply(lambda x: x.astimezone(timezone('US/Pacific')))
+    df["bedtime_end"] = pd.to_datetime(df["bedtime_end"]).apply(lambda x: x.astimezone(timezone('US/Pacific')))
+    df["bedtime_diff"] = df["bedtime_end"] - df["bedtime_start"]
+
+    return df
+
+def clean_longitudinal_data(patient, datadir):
+    """
+    Load and clean data for longitudinal data plot function.
+    """
+    file_name1 = "{}/{}_sleep.csv".format(patient, patient)
+    file_path1 = os.path.join(datadir, file_name1)
+    file_name2 = "{}/{}_activity.csv".format(patient, patient)
+    file_path2 = os.path.join(datadir, file_name2)
+
+    df = pd.read_csv(file_path1)[["summary_date", "hr_lowest", "total"]].merge(pd.read_csv(file_path2)[["summary_date", "cal_total",  "cal_active"]])
+    df["Day"] = df["summary_date"].apply(lambda x: int(x[8:]))
+    df["Month"] = df["summary_date"].apply(lambda x: int(x[5:7]))
+    df["Year"] = df["summary_date"].apply(lambda x: int(x[:4]))
+    df["Sleep"] = df["total"].apply(lambda x: (x//3600) + (((x % 3600) // 60)/60))
+
     return df

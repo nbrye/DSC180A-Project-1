@@ -8,6 +8,8 @@ from pytz import timezone
 import pytz
 from matplotlib import dates as mdates
 import os
+import ast
+import calendar
 # %matplotlib inline
 # plots.py
 def readiness_score_plot(patient, readiness_df):
@@ -163,5 +165,69 @@ def sleep_stages_plot(patient, sleepstage_df):
     plt.ylabel('Hours')
 
     output_file = "{}/{}_sleep_stages.png".format(patient, patient)
+    output_path = os.path.join('plots/'+output_file)
+    plt.savefig(output_path)
+
+def resting_hr_plot(patient, df, day=""):
+    """
+    Creates a resting heart rate plot for the specified date or the latest night.
+    """
+    if len(day) == 0:
+        selection = df.iloc[-1]
+        hr = selection["heart_rate"]
+        bedtime = selection["bedtime_start"]
+    else:
+        selection = df[df["day"] == day]
+        hr = selection["heart_rate"].iloc[0]
+        bedtime = selection["bedtime_start"].iloc[0]
+
+    times = []
+    x = 300
+    for i in hr["items"]:
+        times.append((bedtime) + pd.Timedelta("{} seconds".format(x)))
+        x += 300
+
+    fig, ax = plt.subplots(figsize=(15,8))
+    ax.clear() # Clear the axes
+    ax.plot(times, hr["items"], color = 'skyblue')
+    plt.title("Resting Heart Rate", fontsize=15)
+    plt.axhline(pd.Series(hr["items"]).mean(), color='black', ls="--")
+
+    plt.xlabel('Time\n')
+    plt.ylabel('Heart Rate\n')
+    plt.rcParams["font.size"] = "12"
+    plt.tick_params(left = False, bottom = False, labelsize = 10)
+    plt.box(False)
+
+    output_file = "{}/{}_resting_hr.png".format(patient, patient)
+    output_path = os.path.join('plots/'+output_file)
+    plt.savefig(output_path)
+
+def longitudinal_hr_sleep_burn(patient, df, month="", year=""):
+    """
+    Creates graph that shows longitudinal data including calories burnt, sleep hours, and lowest heart rate.
+    If no month or year given, returns the graph for the last fully complete month. (second to last).
+    """
+    if len(month) == 0:
+        year = df.iloc[-1].Year
+        month = df.iloc[-1].Month - 1
+
+    df = df[(df["Year"] == year) & (df["Month"] == month)]
+
+    fig, ax = plt.subplots(3, figsize=(15,15))
+    fig.suptitle('{} {} Recap'.format(calendar.month_name[month], year))
+    ax[0].plot(df["Day"], df["hr_lowest"], color = 'darkblue')
+    ax[0].set_xlabel("Day")
+    ax[0].set_ylabel("Lowest Heart Rate")
+
+    ax[1].plot(df["Day"], df["Sleep"], color = 'skyblue')
+    ax[1].set_xlabel("Day")
+    ax[1].set_ylabel("Total Sleep Hours")
+
+    ax[2].plot(df["Day"], df["cal_active"], color = 'orange')
+    ax[2].set_xlabel("Day")
+    ax[2].set_ylabel("Calories Burned")
+
+    output_file = "{}/{}_longitudinal_recap_{}_{}.png".format(patient, patient, month, year)
     output_path = os.path.join('plots/'+output_file)
     plt.savefig(output_path)

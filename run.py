@@ -29,13 +29,16 @@ def main(targets):
         sleep_score_plot(p, clean_sleep(p, ddir))
         bedtimes_plot(p, clean_bedtime(p, ddir))
         resting_hr_plot(p, clean_resting_hr(p, ddir))
-        longitudinal_hr_sleep_burn(p, clean_longitudinal_data(p, ddir))
         
-        # Test data is too small for the sleep stages plot
+        # Test data is too small for the sleep stages plot and longitudinal plot
         try:
             sleep_stages_plot(p, clean_sleep_stages(p, ddir))
         except:
             pass
+        
+        if p!= 'testdata':
+            longitudinal_hr_sleep_burn(p, clean_longitudinal_data(p, ddir))
+            
     return
 
 

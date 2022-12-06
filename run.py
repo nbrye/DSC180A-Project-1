@@ -16,7 +16,7 @@ from plots import readiness_score_plot, sleep_score_plot, bedtimes_plot, sleep_s
 
 def main(targets):
     targets = targets[1:]
-    print(targets)
+   
 
     for p in targets:
         if p == 'test':

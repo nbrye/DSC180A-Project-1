@@ -20,9 +20,10 @@ def main(targets):
     for p in inputs:
         
         if p == 'test':
-            ddir = "test/testdata"
+            p = 'testdata'
+            ddir = 'test'
         else:
-            ddir = "data"
+            ddir = 'data'
             
         readiness_score_plot(p, clean_readiness(p, ddir))
         sleep_score_plot(p, clean_sleep(p, ddir))

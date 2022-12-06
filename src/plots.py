@@ -82,6 +82,9 @@ def sleep_score_plot(patient, sleep_df):
 
     output_file = "{}/{}_sleep.png".format(patient, patient)
     output_path = os.path.join('plots/'+output_file)
+    
+    os.makedirs(os.path.join("plots", patient), exist_ok=True)
+    
     plt.savefig(output_path)
 
 
@@ -136,6 +139,9 @@ def bedtimes_plot(patient, bedtimedf):
 
     output_file = "{}/{}_bedtimes.png".format(patient, patient)
     output_path = os.path.join('plots/'+output_file)
+    
+    os.makedirs(os.path.join("plots", patient), exist_ok=True)
+    
     plt.savefig(output_path)
 
 
@@ -166,6 +172,9 @@ def sleep_stages_plot(patient, sleepstage_df):
 
     output_file = "{}/{}_sleep_stages.png".format(patient, patient)
     output_path = os.path.join('plots/'+output_file)
+    
+    os.makedirs(os.path.join("plots", patient), exist_ok=True)
+    
     plt.savefig(output_path)
 
 def resting_hr_plot(patient, df, day=""):
@@ -201,6 +210,9 @@ def resting_hr_plot(patient, df, day=""):
 
     output_file = "{}/{}_resting_hr.png".format(patient, patient)
     output_path = os.path.join('plots/'+output_file)
+    
+    os.makedirs(os.path.join("plots", patient), exist_ok=True)
+    
     plt.savefig(output_path)
 
 def longitudinal_hr_sleep_burn(patient, df, month="", year=""):
@@ -230,4 +242,7 @@ def longitudinal_hr_sleep_burn(patient, df, month="", year=""):
 
     output_file = "{}/{}_longitudinal_recap_{}_{}.png".format(patient, patient, month, year)
     output_path = os.path.join('plots/'+output_file)
+    
+    os.makedirs(os.path.join("plots", patient), exist_ok=True)
+    
     plt.savefig(output_path)

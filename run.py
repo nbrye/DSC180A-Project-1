@@ -15,15 +15,30 @@ from plots import readiness_score_plot, sleep_score_plot, bedtimes_plot, sleep_s
 
 
 def main(targets):
-    inputs = ['patient_1', 'patient_2', 'patient_3']
+    inputs = ['patient_1', 'patient_2', 'patient_3', 'test']
 
     for p in inputs:
-        readiness_score_plot(p, clean_readiness(p, "data"))
-        sleep_score_plot(p, clean_sleep(p, "data"))
-        bedtimes_plot(p, clean_bedtime(p, "data"))
-        sleep_stages_plot(p, clean_sleep_stages(p, "data"))
-        resting_hr_plot(p, clean_resting_hr(p, "data"))
-        longitudinal_hr_sleep_burn(p, clean_longitudinal_data(p, "data"))
+        
+        if p == 'test':
+            p = 'testdata'
+            ddir = 'test'
+        else:
+            ddir = 'data'
+            
+        readiness_score_plot(p, clean_readiness(p, ddir))
+        sleep_score_plot(p, clean_sleep(p, ddir))
+        bedtimes_plot(p, clean_bedtime(p, ddir))
+        resting_hr_plot(p, clean_resting_hr(p, ddir))
+        
+        # Test data is too small for the sleep stages plot and longitudinal plot
+        try:
+            sleep_stages_plot(p, clean_sleep_stages(p, ddir))
+        except:
+            pass
+        
+        if p!= 'testdata':
+            longitudinal_hr_sleep_burn(p, clean_longitudinal_data(p, ddir))
+            
     return
 
 
